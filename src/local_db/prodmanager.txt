@@ -1,0 +1,92 @@
+[
+	{
+		"id": 1,
+		"title": "vestido 1",
+		"description": "Este es un producto prueba",
+		"price": 5000,
+		"thumbnail": "Sin imagen",
+		"code": "1111",
+		"stock": 25
+	},
+	{
+		"id": 2,
+		"title": "pantalon 2",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 3,
+		"title": "pantalon 3",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 4,
+		"title": "pantalon 4",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 5,
+		"title": "vestido 5",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 6,
+		"title": "vestido 6",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 7,
+		"title": "vestido 7",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 8,
+		"title": "remera 8",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 9,
+		"title": "remera 9",
+		"description": "Este es un producto prueba",
+		"price": 2000,
+		"thumbnail": "Sin imagen",
+		"code": "2222",
+		"stock": 25
+	},
+	{
+		"id": 10,
+		"title": "remera 10",
+		"description": "Este es un producto prueba",
+		"price": 900,
+		"thumbnail": "Sin imagen",
+		"code": "3333",
+		"stock": 25
+	}
+]
