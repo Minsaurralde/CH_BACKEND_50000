@@ -14,10 +14,11 @@ app.get("/products", async (req, res) => {
   const data = await instancia1.getProducts();
 
   if (limit) {
-    data.length > limit && data.splice(0, limit + 1);
+    const limitedData = data.slice(0, limit);
+    res.status(200).send(limitedData);
+  } else {
+    res.send(data);
   }
-
-  res.send(data);
 });
 
 // Debe devolver el objeto que coincida con el id que llega por params.
