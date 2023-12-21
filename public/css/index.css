@@ -1,0 +1,19 @@
+.form-group {
+  position: relative;
+}
+
+input ~ span {
+  position: absolute;
+  bottom: 10%;
+  right: 20px;
+}
+
+input:invalid + span:after {
+  content: "✖";
+  padding-left: 5px;
+}
+
+input:valid + span:after {
+  content: "✓";
+  padding-left: 5px;
+}

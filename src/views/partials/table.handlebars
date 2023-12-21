@@ -1,0 +1,33 @@
+<div class="class='col-md-12 col-lg-8'">
+  {{#if hasProduct}}
+    <table class="table table-striped">
+      <caption>Listado de productos</caption>
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Title</th>
+          <th scope="col">Price</th>
+          <th scope="col">Code</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Description</th>
+          <th scope="col">Thumbnail</th>
+        </tr>
+      </thead>
+      <tbody id="product-list">
+        {{#each product}}
+          <tr>
+            <th scope="row">{{this.id}}</th>
+            <td>{{this.title}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.code}}</td>
+            <td>{{this.stock}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.thumbnail}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p>No hay productos cargados...</p>
+  {{/if}}
+</div>

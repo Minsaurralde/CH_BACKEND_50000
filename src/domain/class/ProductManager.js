@@ -2,7 +2,7 @@ import fs from "fs";
 
 class ProductManager {
   constructor(path) {
-    this.path = `./src/local_db/${path}`;
+    this.path = `./src/db_local/${path}`;
   }
 
   getProducts = async () => {
@@ -26,20 +26,18 @@ class ProductManager {
 
     // En caso de no coincidir ningún id, mostrar en consola un error
     if (!found) {
-      return console.error(
-        "getProductById responde: ERROR! No se encontro el id"
-      );
+      throw new Error("getProductById responde: No se encontro el id");
     }
 
     return found;
   };
 
-  addProduct = async (title, description, price, thumbnail, code, stock) => {
-    // - Todos los campos son obligatorios.
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
-      return console.error(
-        "addProduct responde: ERROR! faltan datos obligatorios"
-      );
+  addProduct = async (obj) => {
+    const status = true;
+    const { title, description, price, thumbnail, code, stock } = obj;
+    // - Todos los campos son obligatorios a excepcion de thumbnail
+    if (!title || !description || !price || !code || !stock) {
+      throw new Error("addProduct responde: faltan datos obligatorios");
     }
 
     const products = await this.getProducts(); // lista de productos existente
@@ -47,20 +45,22 @@ class ProductManager {
     // - No se puede repetir el campo "code".
     const found = products.find((element) => element.code == code);
     if (found) {
-      return console.error(
-        "addProduct responde: ERROR! El code ingresado ya existe"
-      );
+      throw new Error("addProduct responde: El code ingresado ya existe");
     }
     // - Al agregarlo, se genera un id autoincrementable.
-    const idmax = Math.max(...products.map((element) => element.id)) + 1;
+    let idmax = 1;
+    if (products.length) {
+      idmax = Math.max(...products.map((element) => element.id)) + 1;
+    }
     const newObject = {
       id: idmax,
       title,
       description,
-      price,
+      price: Number(price),
       thumbnail,
-      code,
-      stock,
+      code: Number(code),
+      stock: Number(stock),
+      status,
     };
 
     products.push(newObject); // actualizo lista
@@ -70,7 +70,7 @@ class ProductManager {
       JSON.stringify(products, null, "\t")
     );
 
-    return console.info("addProduct responde: Ingresado con exito!");
+    return newObject;
   };
 
   updateProduct = async (obj) => {
@@ -80,15 +80,13 @@ class ProductManager {
       !id &&
       (!title || !description || !price || !thumbnail || !code || !stock)
     ) {
-      return console.error(
-        "updateProduct responde: ERROR! faltan datos obligatorios"
-      );
+      throw new Error("updateProduct responde: faltan datos obligatorios");
     }
 
     const isValidID = await this.getProductById(id);
     if (!isValidID) {
-      return console.error(
-        "updateProduct responde: ERROR! No es posible actualizar. El id no existe."
+      throw new Error(
+        "updateProduct responde: No es posible actualizar. El id no existe."
       );
     }
 
@@ -98,8 +96,8 @@ class ProductManager {
       const filter = [...products].filter((el) => el.id !== id);
       const found = filter.find((element) => element.code === code);
       if (found) {
-        return console.error(
-          "updateProduct responde: ERROR! No es posible actualizar. El code ingresado ya existe."
+        throw new Error(
+          "updateProduct responde: No es posible actualizar. El code ingresado ya existe."
         );
       }
     }
@@ -119,8 +117,8 @@ class ProductManager {
     //NUEVO!!! Debe recibir un id y debe eliminar el producto que tenga ese id en el archivo.
     const isValidID = await this.getProductById(id);
     if (!isValidID) {
-      return console.error(
-        "deleteProduct responde: ERROR! No es posible borrar. El id ingresado no existe."
+      throw new Error(
+        "deleteProduct responde: No es posible borrar. El id ingresado no existe."
       );
     }
 
