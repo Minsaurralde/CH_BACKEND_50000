@@ -2,7 +2,7 @@ import fs from "fs";
 
 class ProductManager {
   constructor(path) {
-    this.path = `./src/db_local/${path}`;
+    this.path = `./src/daos/fs/db_local/${path}`;
   }
 
   getProducts = async () => {

@@ -4,27 +4,44 @@
       <caption>Listado de productos</caption>
       <thead class="table-dark">
         <tr>
-          <th scope="col">Id</th>
+          <th scope="col">Category</th>
           <th scope="col">Title</th>
           <th scope="col">Price</th>
           <th scope="col">Code</th>
           <th scope="col">Stock</th>
           <th scope="col">Description</th>
           <th scope="col">Thumbnail</th>
+          {{#if showDelete}} <th scope="col">Delete</th> {{/if}}
+        </tr>
         </tr>
       </thead>
       <tbody id="product-list">
-        {{#each product}}
-          <tr>
-            <th scope="row">{{this.id}}</th>
-            <td>{{this.title}}</td>
-            <td>{{this.price}}</td>
-            <td>{{this.code}}</td>
-            <td>{{this.stock}}</td>
-            <td>{{this.description}}</td>
-            <td>{{this.thumbnail}}</td>
-          </tr>
-        {{/each}}
+        {{#if showDelete}}
+          {{#each product.payload}}
+            <tr id="{{this._id}}">
+              <td>{{this.category}}</td>
+              <td>{{this.title}}</td>
+              <td>{{this.price}}</td>
+              <td>{{this.code}}</td>
+              <td>{{this.stock}}</td>
+              <td>{{this.description}}</td>
+              <td>{{this.thumbnail}}</td>
+              <td><i class="bi bi-trash3-fill" onclick="remove('{{this._id}}')"></i></td> 
+            </tr>
+          {{/each}}
+        {{else}}
+          {{#each product.payload}}
+            <tr id="{{this._id}}">
+              <td>{{this.category}}</td>
+              <td>{{this.title}}</td>
+              <td>{{this.price}}</td>
+              <td>{{this.code}}</td>
+              <td>{{this.stock}}</td>
+              <td>{{this.description}}</td>
+              <td>{{this.thumbnail}}</td>
+            </tr>
+          {{/each}}
+        {{/if}}
       </tbody>
     </table>
   {{else}}

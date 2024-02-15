@@ -1,0 +1,88 @@
+{{! OPCIONES FILTRO Y ORDENADO }}
+<div class="row px-5 py-3">
+  <div class="container" style="max-width: 1140px;">
+    <div class="row">
+
+      <div class="col-lg-2 col-md-2 d-flex align-items-center">
+        <div class="section-title">
+          <h4>Product List</h4>
+        </div>
+      </div>
+      {{!-- category --}}
+      <div class="col-lg-8 col-md-8 d-flex align-items-center">
+        <ul id="filter__controls" class="filter__controls">
+          <li class="active" data-filter="*">All</li>
+          <li class="" data-filter=".women">Women’s</li>
+          <li class="" data-filter=".men">Men’s</li>
+        </ul>
+      </div>
+      {{!-- sort --}}
+      <div
+        class="col-lg-2 col-md-2 d-flex justify-content-end align-items-center"
+      >
+        <div>
+          <select 
+            class="btn btn-secondary"
+            id="dropdownMenuButton"
+          >
+            <option value="0" class="" selected>Price: no sort</option >
+            <option value="1" class="">Price: Low to high</option >
+            <option value="-1" class="">Price: high to low</option >
+          </select >
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{{#if hasProduct}}
+  <div class="container">
+    <div
+      class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+    >
+      {{#each product.payload}}
+        <div class="col mb-5">
+
+          <div id="{{this._id}}" class="card" style="width: 18rem">
+            {{! product image }}
+            <img src="{{this.thumbnail}}" class="card-img-top" alt="..." />
+            {{! product details }}
+            <div class="card-body">
+              {{! name }}
+              <h5 class="card-title">{{this.title}}</h5>
+              {{! price }}
+              ${{this.price}}
+            </div>
+            {{! product actions }}
+            <div class="card-footer">
+              <button type="button" class="btn btn-secondary" disabled>View
+                details</button>
+              <button type="button" class="btn btn-primary" onclick="addToCart('{{this.id}}')">Add to cart</button>
+            </div>
+          </div>
+        </div>
+
+      {{/each}}
+    </div>
+  </div>
+
+  {{!-- pagination --}}
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class={{#if product.prevLink }}"page-link"{{else}}"page-link disabled"{{/if}} href={{product.prevLink}} tabindex="-1">Prev</a>
+      </li>
+      <li class="page-item"><a
+          class="page-link"
+          href="#"
+        >{{product.page}}></a></li>
+      <li class="page-item">
+        <a class={{#if product.nextLink }}"page-link"{{else}}"page-link disabled"{{/if}} href={{product.nextLink}}>Next</a>
+      </li>
+    </ul>
+  </nav>
+{{else}}
+  <p>No se encontraron productos ...</p>
+{{/if}}

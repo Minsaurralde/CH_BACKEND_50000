@@ -1,0 +1,39 @@
+<nav class="navbar navbar-dark bg-dark fixed-top">
+
+  <div class="container-fluid">
+    <a class="navbar-brand">Codershop</a>
+
+    <div>
+      <button class="btn btn-outline-light" type="button">
+        <i class="bi bi-bag"></i>
+        Shopping bag (0)
+      </button>
+
+      <button
+        class="navbar-toggler border-white"
+        type="button"
+        id="navbarToggleMenu"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="dropdown-menu dropdown-menu-dark"
+        style="right: 0; left:auto;"
+        id="navbarToggleMenu"
+      >
+        <ul class="navbar-nav p-2" style="text-align: center">
+          <li>
+            <a class="dropdown-item" href="/profile">Profile</a>
+          </li>
+          <li><hr class="dropdown-divider-dark" /></li>
+          <li>
+            <span class="dropdown-item" onclick="signOut()">SignOut</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</nav>

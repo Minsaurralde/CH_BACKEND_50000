@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div
+    class="bg-white p-5 rounded-5 text-secondary shadow"
+    style="width: 25rem"
+  >
+    <div class="d-flex justify-content-center">
+      <i class="bi bi-person-circle" style="font-size: 7rem"></i>
+    </div>
+    <div class="text-center fs-1 fw-bold">Register Form</div>
+
+    <form id="registerForm" action="">
+      {{! input name }}
+      <div class="input-group mt-4">
+        <div class="input-group-text bg-primary">
+          <label class="text-white">Name</label>
+        </div>
+        <input
+          class="form-control bg-light"
+          type="text"
+          name="first_name"
+          placeholder="Name"
+          required
+        />
+      </div>
+      {{! input last-name }}
+      <div class="input-group mt-4">
+        <div class="input-group-text bg-primary">
+          <label class="text-white">Last name</label>
+        </div>
+        <input
+          class="form-control bg-light"
+          type="text"
+          name="last_name"
+          placeholder="Last name"
+          required
+        />
+      </div>
+      {{! input age }}
+      <div class="input-group mt-4">
+        <div class="input-group-text bg-primary">
+          <label class="text-white">Age</label>
+        </div>
+        <input
+          class="form-control bg-light"
+          type="number"
+          name="age"
+          placeholder="Age"
+          required
+        />
+      </div>
+      {{! input email }}
+      <div class="input-group mt-4">
+        <div class="input-group-text bg-primary">
+          <label class="text-white">Email</label>
+        </div>
+        <input
+          class="form-control bg-light"
+          type="email"
+          name="email"
+          placeholder="your-email@example.com"
+          required
+        />
+      </div>
+      {{! input password }}
+      <div class="input-group mt-4">
+        <div class="input-group-text bg-primary">
+          <label class="text-white">Password</label>
+        </div>
+        <input
+          class="form-control bg-light"
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+      </div>
+      {{! button submit }}
+      <button
+        type="submit"
+        class="btn btn-primary text-white w-100 mt-4 fw-semibold shadow-sm"
+      >
+        Submit
+      </button>
+    </form>
+
+    <div class="d-flex gap-1 justify-content-center mt-1">
+      <div>Do you have an account?</div>
+      <a
+        href="/login"
+        class="text-decoration-none text-primary fw-semibold"
+      >SignIn</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/authregister.js"></script>
