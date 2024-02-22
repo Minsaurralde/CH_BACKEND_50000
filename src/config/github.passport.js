@@ -8,7 +8,7 @@ import {
 } from "../constants/environments.js";
 import { createHash } from "../utils/bcrypt.js";
 
-export const intializePassport = () => {
+export const intializePassportGithub = () => {
   passport.use(
     "github",
     new GithubStrategy(
@@ -19,7 +19,7 @@ export const intializePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log(profile);
-        let user = await userModel.findOne({ email: profile._json.email });
+        let user = await userModel.findOne({ email: profile.profileUrl });
         if (!user) {
           let newUser = {
             first_name: profile.username,

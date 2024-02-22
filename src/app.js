@@ -13,8 +13,12 @@ import sessionsRouter from "./routes/sessions.router.js";
 import ProductManager from "./daos/mongo/class/ProductManager.js";
 import mongoUri from "./daos/mongo/constants/mongourl.js";
 import __dirname from "./constants/dirnames.js";
-import { intializePassport } from "./config/passport.config.js";
+
+import cookieParser from "cookie-parser";
 import passport from "passport";
+import { initializePassportJWT } from "./config/jwt.passport.js";
+import { initializePassportLocal } from "./config/local.passport.js";
+import { intializePassportGithub } from "./config/github.passport.js";
 
 const app = express();
 
@@ -30,7 +34,12 @@ app.engine("handlebars", handlebars.engine()); // 1 - inicializar
 app.set("views", `${__dirname}/src/views`); // 2 - setear la ruta de las vistas
 app.set("view engine", "handlebars"); // 3 - setear para que el server renderice con handlebars
 
-intializePassport();
+// Indicamos que vamos a trabajar con cookies
+app.use(cookieParser());
+
+initializePassportLocal();
+initializePassportJWT();
+intializePassportGithub();
 app.use(passport.initialize());
 
 const DBconection = mongoose.connect(mongoUri);

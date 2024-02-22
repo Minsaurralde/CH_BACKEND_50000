@@ -1,39 +1,46 @@
 import { Router } from "express";
 
 import ProductManager from "../daos/mongo/class/ProductManager.js";
+import passport from "passport";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  if (!req.session.user) return res.redirect("/login");
+router.get(
+  "/",
+  passport.authenticate(["jwt", "github"], { session: false }),
+  async (req, res) => {
+    if (!req.user) return res.redirect("/login");
 
-  const limit = req.query.limit && Number(req.query.limit);
-  const page = req.query.page && Number(req.query.page);
-  const sort = req.query.sort && Number(req.query.sort);
-  const { filter, filterVal } = req.query;
+    console.log("USER: ", req.user);
 
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
-  //obtengo los datos
-  const data = await instancia1.getProducts(
-    limit,
-    page,
-    sort,
-    filter,
-    filterVal
-  );
-  const hasData = !!data.payload.length;
+    const limit = req.query.limit && Number(req.query.limit);
+    const page = req.query.page && Number(req.query.page);
+    const sort = req.query.sort && Number(req.query.sort);
+    const { filter, filterVal } = req.query;
 
-  res.render("home", {
-    hasProduct: hasData,
-    showDelete: false,
-    product: data,
-    user: req.session.user,
-  });
-});
+    //creo instancia de la clase
+    const instancia1 = new ProductManager();
+    //obtengo los datos
+    const data = await instancia1.getProducts(
+      limit,
+      page,
+      sort,
+      filter,
+      filterVal
+    );
+    const hasData = !!data.payload.length;
+
+    res.render("home", {
+      hasProduct: hasData,
+      showDelete: false,
+      product: data,
+      user: req.user,
+    });
+  }
+);
 
 router.get("/realtimeproducts", async (req, res) => {
-  if (!req.session.user) return res.redirect("/login");
+  if (!req.session.user) return res.redirect("/login"); //------> ver session
   //creo instancia de la clase
   const instancia1 = new ProductManager();
   //obtengo los datos
@@ -47,13 +54,8 @@ router.get("/realtimeproducts", async (req, res) => {
   });
 });
 
-router.get("/chat", async (req, res) => {
-  if (!req.session.user) return res.redirect("/login");
-  res.render("chat", { data: false });
-});
-
 router.get("/profile", async (req, res) => {
-  if (!req.session.user) return res.redirect("/login");
+  if (!req.session.user) return res.redirect("/login"); //------> ver session
   res.render("profile", { user: req.session.user });
 });
 

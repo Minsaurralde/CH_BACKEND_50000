@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import autopopulate from "mongoose-autopopulate";
 
 const nameCollection = "users"; // asi se llama la coleccion en la base de datos
 
@@ -17,4 +18,5 @@ const customScheema = new mongoose.Schema({
   },
 });
 
+customScheema.plugin(autopopulate);
 export const userModel = mongoose.model(nameCollection, customScheema);
