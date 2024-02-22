@@ -1,20 +1,17 @@
 import { Router } from "express";
+import passport from "passport";
 
 import ProductManager from "../daos/mongo/class/ProductManager.js";
-import passport from "passport";
+import { validateCookie } from "../middleware/validateCookie.js";
 
 const router = Router();
 
 // rutas privadas
 router.get(
   "/",
-  passport.authenticate(["github", "jwt"], { session: false }),
+  validateCookie,
+  passport.authenticate(["jwt"], { session: false }),
   async (req, res) => {
-    console.log(req);
-    if (!req.user) return res.redirect("/login");
-
-    console.log("USER: ", req.user);
-
     const limit = req.query.limit && Number(req.query.limit);
     const page = req.query.page && Number(req.query.page);
     const sort = req.query.sort && Number(req.query.sort);
@@ -43,7 +40,7 @@ router.get(
 
 router.get(
   "/realtimeproducts",
-  passport.authenticate(["jwt", "github"], { session: false }),
+  passport.authenticate(["jwt"], { session: false }),
   async (req, res) => {
     if (!req.user) return res.redirect("/login");
     //creo instancia de la clase
@@ -62,7 +59,7 @@ router.get(
 
 router.get(
   "/profile",
-  passport.authenticate(["jwt", "github"], { session: false }),
+  passport.authenticate(["jwt"], { session: false }),
   async (req, res) => {
     if (!req.user) return res.redirect("/login"); //------> ver session
     res.render("profile", { user: req.user });
