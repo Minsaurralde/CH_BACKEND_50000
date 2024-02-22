@@ -2,7 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 
 import { userModel } from "../daos/mongo/models/user.model.js";
-import { createHash, isValidPassword } from "../utils/bcrypt.js";
+import { createHash } from "../utils/bcrypt.js";
 import jwt from "jsonwebtoken";
 import { JWT_COOKIE, JWT_SECRET } from "../constants/environments.js";
 
@@ -41,6 +41,7 @@ router.post(
   }
 );
 
+// solo para JWT
 router.get(
   "/current",
   passport.authenticate(["jwt", "github"], { session: false }),
@@ -49,19 +50,12 @@ router.get(
   }
 );
 
-// router.get(
-//   "/current",
-//   passportCall(["jwt", "github"], { session: false }),
-//   authorization("user"),
-//   (req, res) => {
-//     res.send(req.user);
-//   }
-// );
-
 router.post("/logout", async (req, res) => {
   try {
-    req.session.destroy();
-    res.status(200).send({ status: "success", message: "Logout OK!" });
+    res
+      .clearCookie(JWT_COOKIE)
+      .status(200)
+      .send({ status: "success", message: "Logout OK!" });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
@@ -96,7 +90,7 @@ router.get(
   "/callback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
-    console.log("exito");
+    console.log("/callback dice exito");
     res.redirect("/");
   }
 );

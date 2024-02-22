@@ -15,6 +15,7 @@ export const initializePassportJWT = () => {
         secretOrKey: JWT_SECRET,
       },
       async (jwtPayload, done) => {
+        console.log("jwt Payload: ", jwtPayload);
         try {
           return done(null, jwtPayload);
         } catch (error) {
