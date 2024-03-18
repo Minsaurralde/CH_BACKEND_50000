@@ -44,7 +44,7 @@ router.post(
 // solo para JWT
 router.get(
   "/current",
-  passport.authenticate(["jwt", "github"], { session: false }),
+  passport.authenticate(["jwt"], { session: false }),
   async (req, res) => {
     res.status(200).send(req.user);
   }
@@ -90,8 +90,21 @@ router.get(
   "/callback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
-    console.log("/callback dice exito");
-    res.redirect("/");
+    let token = jwt.sign(
+      {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        age: req.user.age,
+      },
+      JWT_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
+    res
+      .cookie(JWT_COOKIE, token, { httpOnly: true })
+      .redirect("/");
   }
 );
 
