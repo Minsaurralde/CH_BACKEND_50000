@@ -1,10 +1,10 @@
 import { Router } from "express";
 import passport from "passport";
-
-import { userModel } from "../daos/mongo/models/user.model.js";
-import { createHash } from "../utils/bcrypt.js";
 import jwt from "jsonwebtoken";
+
+import { userModel } from "../store/mongo/models/user.model.js";
 import { JWT_COOKIE, JWT_SECRET } from "../constants/environments.js";
+import { createHash } from "../utils/bcrypt.js";
 
 const router = Router();
 
@@ -102,9 +102,7 @@ router.get(
         expiresIn: "24h",
       }
     );
-    res
-      .cookie(JWT_COOKIE, token, { httpOnly: true })
-      .redirect("/");
+    res.cookie(JWT_COOKIE, token, { httpOnly: true }).redirect("/");
   }
 );
 

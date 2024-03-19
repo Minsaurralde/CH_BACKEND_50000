@@ -5,3 +5,7 @@ export const GITHUB_CALLBACK = "http://localhost:8080/api/sessions/callback";
 
 export const JWT_SECRET = "coderSecret";
 export const JWT_COOKIE = "coderCookie";
+
+export const MONGO_CLUSTER = "codercluster";
+export const MONGO_USER = "CoderUser";
+export const MONGO_PASSWORD = "Mi34152384";

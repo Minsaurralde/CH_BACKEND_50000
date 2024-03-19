@@ -1,12 +1,12 @@
 import passport from "passport";
 import GithubStrategy from "passport-github2";
-import { userModel } from "../daos/mongo/models/user.model.js";
+import { userModel } from "../../store/mongo/models/user.model.js";
 import {
   GITHUB_CALLBACK,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
-} from "../constants/environments.js";
-import { createHash } from "../utils/bcrypt.js";
+} from "../../constants/environments.js";
+import { createHash } from "../../utils/bcrypt.js";
 
 export const intializePassportGithub = () => {
   passport.use(

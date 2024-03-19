@@ -1,18 +1,14 @@
 import { Router } from "express";
-import ProductManager from "../daos/mongo/class/ProductManager.js";
-import CartManager from "../daos/mongo/class/CartManager.js";
+import ProductService from "../services/product.service.js";
+import CartService from "../services/cart.service.js";
 
 const router = Router();
 
 // Debe crear un nuevo carrito. estructura id: number|string, products: []
 router.post("/", async (req, res) => {
-  const newProduct = req.body;
-  //creo instancia de la clase
-  const instancia1 = new CartManager();
-
   //agrego un carrito
   try {
-    const response = await instancia1.addCart();
+    const response = await CartService.newCart();
     res.status(200).send(response);
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -21,12 +17,9 @@ router.post("/", async (req, res) => {
 
 // Debe listar los productos que pertenezcan al carrito.
 router.get("/", async (req, res) => {
-  //creo instancia de la clase
-  const instancia1 = new CartManager();
-
   //solicito los datos
   try {
-    const response = await instancia1.getCarts();
+    const response = await CartService.getAll();
     res.status(200).send(response);
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -37,12 +30,9 @@ router.get("/", async (req, res) => {
 router.get("/:cid", async (req, res) => {
   const cartId = req.params.cid;
 
-  //creo instancia de la clase
-  const instancia1 = new CartManager();
-
   //solicito los datos
   try {
-    const response = await instancia1.getCartsById(cartId);
+    const response = await CartService.getById(cartId);
     res.status(200).send(response);
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -54,14 +44,10 @@ router.post("/:cid/product/:pid", async (req, res) => {
   const cartId = req.params.cid;
   const prodId = req.params.pid;
 
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
-  const instancia2 = new CartManager();
-
   //inserto los datos
   try {
-    await instancia1.getProductById(prodId); // 1 - valido prodId
-    await instancia2.addProductCart(cartId, prodId, 1); // 2 - proceso el update
+    await ProductService.getById(prodId); // 1 - valido prodId
+    await CartService.addProduct(cartId, prodId, 1); // 2 - proceso el update
     res.status(200).send({ exito: "fue agregado con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -73,12 +59,9 @@ router.delete("/:cid/product/:pid", async (req, res) => {
   const cartId = req.params.cid;
   const prodId = req.params.pid;
 
-  //creo instancia de la clase
-  const instancia2 = new CartManager();
-
   //inserto los datos
   try {
-    await instancia2.deleteProductCart(cartId, prodId); // 2 - proceso el borrado
+    await CartService.deleteProduct(cartId, prodId); // 2 - proceso el borrado
     res.status(200).send({ exito: "se elimino con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -89,12 +72,9 @@ router.delete("/:cid/product/:pid", async (req, res) => {
 router.delete("/:cid", async (req, res) => {
   const cartId = req.params.cid;
 
-  //creo instancia de la clase
-  const instancia2 = new CartManager();
-
   //inserto los datos
   try {
-    await instancia2.deleteAllProductsCart(cartId); // 2 - proceso el borrado
+    await CartService.deleteAllProducts(cartId); // 2 - proceso el borrado
     res.status(200).send({ exito: "los productos se eliminaron con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -107,14 +87,10 @@ router.put("/:cid/product/:pid", async (req, res) => {
   const prodId = req.params.pid;
   const qty = req.body.qty;
 
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
-  const instancia2 = new CartManager();
-
   //inserto los datos
   try {
-    await instancia1.getProductById(prodId); // 1 - valido que exista el prodId
-    await instancia2.updateProductCart(cartId, prodId, qty); // 2 - proceso el update
+    await ProductService.getById(prodId); // 1 - valido que exista el prodId
+    await CartService.updateProduct(cartId, prodId, qty); // 2 - proceso el update
     res.status(200).send({ exito: "se actualizo con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -126,13 +102,9 @@ router.put("/:cid", async (req, res) => {
   const cartId = req.params.cid;
   const newProducts = req.body;
 
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
-  const instancia2 = new CartManager();
-
   //inserto los datos
   try {
-    await instancia2.updateAllProductsCart(cartId, newProducts); // 2 - proceso el update
+    await CartService.updateAllProducts(cartId, newProducts); // 2 - proceso el update
     res.status(200).send({ exito: "se actualizo con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });

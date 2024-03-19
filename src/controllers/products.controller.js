@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateProduct } from "../middleware/validateProduct.js";
-import ProductManager from "../daos/mongo/class/ProductManager.js";
+import ProductService from "../services/product.service.js";
 
 const router = Router();
 
@@ -11,10 +11,8 @@ router.get("/", async (req, res) => {
   const { filter, filterVal, sort } = req.query;
   console.log("sort get: ", sort);
 
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
   //obtengo los datos
-  const data = await instancia1.getProducts(
+  const data = await ProductService.getAll(
     limit,
     page,
     sort,
@@ -28,11 +26,10 @@ router.get("/", async (req, res) => {
 // Debe devolver el objeto que coincida con el id que llega por params.
 router.get("/:pid", async (req, res) => {
   const prodId = req.params.pid;
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
+
   //obtengo los datos
   try {
-    const data = await instancia1.getProductById(prodId);
+    const data = await ProductService.getById(prodId);
     res.status(200).send(data);
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -42,11 +39,10 @@ router.get("/:pid", async (req, res) => {
 // Debe agregar un nuevo prod con un id autogenerado
 router.post("/", validateProduct, async (req, res) => {
   const newProduct = req.body;
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
+
   //inserto los datos
   try {
-    await instancia1.addProduct(newProduct);
+    await ProductService.newProduct(newProduct);
     res.status(200).send({ exito: "fue agregado con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -58,12 +54,9 @@ router.put("/:pid", validateProduct, async (req, res) => {
   const prodId = req.params.pid;
   const newProduct = req.body;
 
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
-
   //actualizo los datos
   try {
-    await instancia1.updateProduct(prodId, newProduct);
+    await ProductService.updateById(prodId, newProduct);
     res.status(200).send({ exito: "se actualizo con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -74,12 +67,9 @@ router.put("/:pid", validateProduct, async (req, res) => {
 router.delete("/:pid", async (req, res) => {
   const prodId = Number(req.params.pid);
 
-  //creo instancia de la clase
-  const instancia1 = new ProductManager();
-
   //solicito el borrado
   try {
-    await instancia1.deleteProduct(prodId);
+    await ProductService.deleteById(prodId);
     res.status(200).send({ exito: "fue borrado con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });

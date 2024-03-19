@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 
-import ProductManager from "../daos/mongo/class/ProductManager.js";
+import ProductService from "../services/product.service.js";
 import { validateCookie } from "../middleware/validateCookie.js";
 
 const router = Router();
@@ -17,10 +17,8 @@ router.get(
     const sort = req.query.sort && Number(req.query.sort);
     const { filter, filterVal } = req.query;
 
-    //creo instancia de la clase
-    const instancia1 = new ProductManager();
     //obtengo los datos
-    const data = await instancia1.getProducts(
+    const data = await ProductService.getAll(
       limit,
       page,
       sort,
@@ -43,10 +41,9 @@ router.get(
   passport.authenticate(["jwt"], { session: false }),
   async (req, res) => {
     if (!req.user) return res.redirect("/login");
-    //creo instancia de la clase
-    const instancia1 = new ProductManager();
+
     //obtengo los datos
-    const data = await instancia1.getProducts();
+    const data = await ProductService.getAll();
     const hasData = !!data.payload.length;
 
     res.render("realTimeProducts", {
