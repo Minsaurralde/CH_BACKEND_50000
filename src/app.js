@@ -13,7 +13,7 @@ import { intializePassportGithub } from "./passport/config/github.passport.js";
 import ProductService from "./services/product.service.js";
 import { router } from "./router/index.js";
 import mongoUri from "./store/mongo/config/index.js";
-import __dirname from "./constants/dirnames.js";
+import __dirname from "./utils/dirnames.js";
 
 const app = express();
 
@@ -68,5 +68,5 @@ socketServer.on("connection", (socket) => {
   });
 });
 
-//CAPA DE RUTEO
+// //CAPA DE RUTEO
 router(app);

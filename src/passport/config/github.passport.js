@@ -5,7 +5,7 @@ import {
   GITHUB_CALLBACK,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
-} from "../../constants/environments.js";
+} from "../../app.config.js";
 import { createHash } from "../../utils/bcrypt.js";
 
 export const intializePassportGithub = () => {
