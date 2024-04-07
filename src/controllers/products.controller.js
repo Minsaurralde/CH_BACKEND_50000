@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { validateProduct } from "../middleware/validateProduct.js";
 import ProductService from "../services/product.service.js";
+import { authorization } from "../middleware/authorization.js";
 
 const router = Router();
 
@@ -36,8 +37,8 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
-// Debe agregar un nuevo prod con un id autogenerado
-router.post("/", validateProduct, async (req, res) => {
+// Debe agregar un nuevo prod con un id autogenerado (solo admin)
+router.post("/", authorization("admin"), validateProduct, async (req, res) => {
   const newProduct = req.body;
 
   //inserto los datos
@@ -49,22 +50,27 @@ router.post("/", validateProduct, async (req, res) => {
   }
 });
 
-// Debe tomar un producto y actualizarlo por los campos enviados desde body. No debe afectar al ID!
-router.put("/:pid", validateProduct, async (req, res) => {
-  const prodId = req.params.pid;
-  const newProduct = req.body;
+// Debe tomar un producto y actualizarlo por los campos enviados desde body. No debe afectar al ID! (solo admin)
+router.put(
+  "/:pid",
+  authorization("admin"),
+  validateProduct,
+  async (req, res) => {
+    const prodId = req.params.pid;
+    const newProduct = req.body;
 
-  //actualizo los datos
-  try {
-    await ProductService.updateById(prodId, newProduct);
-    res.status(200).send({ exito: "se actualizo con exito" });
-  } catch (error) {
-    res.status(400).send({ error: error.message });
+    //actualizo los datos
+    try {
+      await ProductService.updateById(prodId, newProduct);
+      res.status(200).send({ exito: "se actualizo con exito" });
+    } catch (error) {
+      res.status(400).send({ error: error.message });
+    }
   }
-});
+);
 
-// Debe eliminar el producto con el pid indicado
-router.delete("/:pid", async (req, res) => {
+// Debe eliminar el producto con el pid indicado (solo admin)
+router.delete("/:pid", authorization("admin"), async (req, res) => {
   const prodId = Number(req.params.pid);
 
   //solicito el borrado

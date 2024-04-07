@@ -1,19 +1,25 @@
 import { Router } from "express";
+import passport from "passport";
 import ProductService from "../services/product.service.js";
 import CartService from "../services/cart.service.js";
+import { authorization } from "../middleware/authorization.js";
 
 const router = Router();
 
 // Debe crear un nuevo carrito. estructura id: number|string, products: []
-router.post("/", async (req, res) => {
-  //agrego un carrito
-  try {
-    const response = await CartService.newCart();
-    res.status(200).send(response);
-  } catch (error) {
-    res.status(400).send({ error: error.message });
+router.post(
+  "/",
+  passport.authenticate(["jwt"], { session: false }),
+  async (req, res) => {
+    try {
+      //agrego un carrito
+      const response = await CartService.newCart();
+      res.status(200).send(response);
+    } catch (error) {
+      res.status(400).send({ error: error.message });
+    }
   }
-});
+);
 
 // Debe listar los productos que pertenezcan al carrito.
 router.get("/", async (req, res) => {
@@ -40,34 +46,46 @@ router.get("/:cid", async (req, res) => {
   }
 });
 
-// Debe finalizar el proceso de compra del carrito recibido
-router.post("/:cid/purchase", async (req, res) => {
-  const cartId = req.params.cid;
+// Debe finalizar el proceso de compra del carrito recibido y entregar un ticket
+router.post(
+  "/:cid/purchase",
+  passport.authenticate(["jwt"], { session: false }),
+  authorization("user"),
+  async (req, res) => {
+    const cartId = req.params.cid;
+    const email = req.user.email;
 
-  //solicito los datos
-  try {
-    const response = await CartService.getById(cartId);
-    res.status(200).send(response);
-  } catch (error) {
-    console.log("ENTRE EN ERROR!!!!!!!!!!!!!!!!!!!!!!!");
-    res.status(400).send({ error: error.message });
+    try {
+      const purchase = await CartService.purchaseCart(cartId, email);
+      res.status(200).send(purchase);
+    } catch (error) {
+      console.log("ENTRE EN ERROR!!!!!!!!!!!!!!!!!!!!!!!");
+      res.status(400).send({ error: error.message });
+    }
   }
-});
+);
 
 // Debe agregar el producto al arreglo “products” del carrito seleccionado. estructura "product": id, "quantity": N (si ya existe el prod, incrementar)
-router.post("/:cid/product/:pid", async (req, res) => {
-  const cartId = req.params.cid;
-  const prodId = req.params.pid;
+router.post(
+  "/:cid/product/:pid",
+  passport.authenticate(["jwt"], { session: false }),
+  authorization("user"),
+  async (req, res) => {
+    const cartId = req.params.cid;
+    const prodId = req.params.pid;
 
-  //inserto los datos
-  try {
-    await ProductService.getById(prodId); // 1 - valido prodId
-    await CartService.addProduct(cartId, prodId, 1); // 2 - proceso el update
-    res.status(200).send({ exito: "el item se agrego con exito a tu carrito" });
-  } catch (error) {
-    res.status(400).send({ error: error.message });
+    //inserto los datos
+    try {
+      await ProductService.getById(prodId); // 1 - valido prodId
+      await CartService.addProduct(cartId, prodId, 1); // 2 - proceso el update
+      res
+        .status(200)
+        .send({ exito: "el item se agrego con exito a tu carrito" });
+    } catch (error) {
+      res.status(400).send({ error: error.message });
+    }
   }
-});
+);
 
 // Debe eliminar del carrito el producto seleccionado.
 router.delete("/:cid/product/:pid", async (req, res) => {

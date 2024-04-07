@@ -1,8 +1,7 @@
-// import mongoose from "mongoose";
-// import mongoUri from "./mongo/config/index.js";
+import { generateId } from "../utils/uuid.js";
 import { cartModel } from "./mongo/models/cart.model.js";
-
-// const DBconection = mongoose.connect(mongoUri);
+import { ticketModel } from "./mongo/models/ticket.model.js";
+import productStore from "./product.store.js";
 
 const getCarts = async () => {
   let result = await cartModel.find();
@@ -87,12 +86,57 @@ const updateProductCart = async (cartID, prodID, Qty) => {
 
 const updateAllProductsCart = async (cartID, newProducts) => {
   const cart = await getCartsById(cartID);
-  const prodList = cart.products;
-
   prodList = newProducts;
   cart.save();
 
   return;
+};
+
+const purchaseCart = async (cartID, email) => {
+  const cart = await getCartsById(cartID);
+  const shopingList = cart.products;
+
+  let finalPrice = 0;
+  let purchaseOK = [];
+  let purchaseNOK = [];
+
+  for (let index = 0; index < shopingList.length; index++) {
+    const element = shopingList[index];
+
+    const product = await productStore.getProductById(element.product._id);
+    const stock = element.product.stock;
+    const qty = element.quantity;
+
+    if (stock > qty) {
+      //valido y updateo stock
+      product.stock -= qty;
+      product.save();
+      // lo contabilizo para el cobro
+      finalPrice += product.price * qty;
+      purchaseOK.push(element);
+    } else {
+      // si no tengo stock, lo guardo en un array
+      purchaseNOK.push(element);
+    }
+  }
+
+  // elimino los productos del carro
+  deleteAllProductsCart(cartID);
+
+  if (purchaseOK.length) {
+    const newTicket = {
+      code: generateId(),
+      amount: finalPrice,
+      purchaser: email,
+    };
+    // enviar numero de ticket
+    const result = await ticketModel.create(newTicket);
+    return {
+      ticket: result,
+      successProducts: purchaseOK,
+      noStockProducts: purchaseNOK,
+    };
+  }
 };
 
 export default {
@@ -104,4 +148,5 @@ export default {
   deleteAllProductsCart,
   updateProductCart,
   updateAllProductsCart,
+  purchaseCart,
 };

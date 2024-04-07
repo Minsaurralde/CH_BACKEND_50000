@@ -1,4 +1,4 @@
-<form class="flex-grow-1 mb-5">
+<form id="payment" class="flex-grow-1 mb-5" onsubmit="handlePurchase(event)">
 
   {{! Card Number }}
   <div class="form-outline mb-5">
@@ -61,7 +61,8 @@
 
   {{! buy button }}
   <button
-    type="button"
+    type="submit"
+    formtarget="payment"
     class="mb-5 btn btn-primary btn-block btn-lg"
     style="position: absolute; bottom: 3rem;"
   >Buy now</button>

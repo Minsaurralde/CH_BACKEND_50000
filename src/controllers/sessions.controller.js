@@ -22,12 +22,14 @@ router.post(
   "/login",
   passport.authenticate("login", { session: false }),
   async (req, res) => {
+    console.log("USER", req.user);
     let token = jwt.sign(
       {
         first_name: req.user.first_name,
         last_name: req.user.last_name,
         email: req.user.email,
         age: req.user.age,
+        role: req.user.role,
       },
       JWT_SECRET,
       {
@@ -96,6 +98,7 @@ router.get(
         last_name: req.user.last_name,
         email: req.user.email,
         age: req.user.age,
+        role: req.user.role,
       },
       JWT_SECRET,
       {

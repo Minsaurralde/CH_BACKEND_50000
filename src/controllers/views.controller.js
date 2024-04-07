@@ -4,6 +4,7 @@ import passport from "passport";
 import ProductService from "../services/product.service.js";
 import { validateCookie } from "../middleware/validateCookie.js";
 import cartService from "../services/cart.service.js";
+import { authorization } from "../middleware/authorization.js";
 
 const router = Router();
 
@@ -40,6 +41,7 @@ router.get(
 router.get(
   "/realtimeproducts",
   passport.authenticate(["jwt"], { session: false }),
+  authorization("admin"),
   async (req, res) => {
     if (!req.user) return res.redirect("/login");
 
@@ -67,13 +69,14 @@ router.get(
 router.get(
   "/checkout",
   passport.authenticate(["jwt"], { session: false }),
+  authorization("user"),
   async (req, res) => {
     if (!req.user) return res.redirect("/login");
     const { cid } = req.query;
 
     //obtengo los datos
-    const products = [];
     let totalPrice = 0;
+    const products = [];
     const data = await cartService.getById(cid);
     const hasData = !!data.products.length;
 

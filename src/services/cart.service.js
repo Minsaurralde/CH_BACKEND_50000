@@ -64,6 +64,15 @@ const updateAllProducts = async (cartID, newProducts) => {
   return;
 };
 
+const purchaseCart = async (cartID, email) => {
+  if (!cartID || !email) {
+    throw new Error("service responde: faltan datos obligatorios");
+  }
+
+  const result = await store.purchaseCart(cartID, email);
+  return result;
+};
+
 export default {
   getAll,
   getById,
@@ -73,4 +82,5 @@ export default {
   deleteAllProducts,
   updateProduct,
   updateAllProducts,
+  purchaseCart,
 };
