@@ -48,3 +48,61 @@ input:valid + span:after {
   content: "";
   opacity: 0;
 }
+
+/* SHOPING CART */
+
+@media (min-width: 1025px) {
+  .h-custom {
+    height: 100vh !important;
+  }
+}
+
+/* numeros */
+.number-input input[type="number"]::-webkit-inner-spin-button,
+.number-input input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+/* botones + & - */
+.number-input button {
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+}
+.number-input button:before,
+.number-input button:after {
+  display: inline-block;
+  position: absolute;
+  content: "";
+  height: 2px;
+  transform: translate(-50%, -50%);
+}
+.number-input button.plus:after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.number-input input[type="number"] {
+  text-align: center;
+}
+.number-input.number-input button.minus {
+  padding-left: 10px;
+}
+.shopping-cart .def-number-input.number-input input[type="number"] {
+  max-width: 2rem;
+  border: none;
+}
+.shopping-cart .def-number-input.number-input button:before,
+.shopping-cart .def-number-input.number-input button:after {
+  width: 0.5rem;
+}
+.shopping-cart .def-number-input.number-input button.minus:before,
+.shopping-cart .def-number-input.number-input button.minus:after {
+  background-color: #9e9e9e;
+}
+.shopping-cart .def-number-input.number-input button.plus:before,
+.shopping-cart .def-number-input.number-input button.plus:after {
+  background-color: #4285f4;
+}

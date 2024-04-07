@@ -71,34 +71,52 @@ const addToCart = async (prodID) => {
   console.log("add: ", prodID);
 
   if (!currentCart) {
-    const response = await fetch("http://localhost:8080/api/carts/", {
+    const res = await fetch("http://localhost:8080/api/carts/", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       body: {}, // body data type must match "Content-Type" header
     });
-    console.log(response);
+    currentCart = await res.json();
   }
 
   if (currentCart) {
-    const url = `http://localhost:8080/api/carts/${currentCart._id}/product/${prodID}`;
+    const url = `http://localhost:8080/api/carts/${currentCart}/product/${prodID}`;
     try {
-      const response = await fetch(url, {
+      const res = await fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         body: {}, // body data type must match "Content-Type" header
       });
-      alert("el item se agrego a tu carrito");
+      if (!res.ok) throw new Error("UPS! algo salio mal");
+
+      const json = await res.json();
+      alert(json.exito);
     } catch (error) {
       alert(error.toString());
     }
   }
 };
 
+const goToCheckout = () => {
+  if (!currentCart) {
+    Swal.fire({
+      icon: "info",
+      title: "Your Cart is empty",
+      text: "Click OK to continue shopping.",
+    });
+    return;
+  }
+
+  const params = new URLSearchParams("cid");
+  params.set("cid", currentCart.toString());
+  location.assign(`/checkout?${params}`);
+};
+
 const signOut = async () => {
   try {
-    const response = await fetch("http://localhost:8080/api/sessions/logout", {
+    const res = await fetch("http://localhost:8080/api/sessions/logout", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       body: {}, // body data type must match "Content-Type" header
     });
-    console.log(response);
+    console.log(res);
     window.location.replace("/login");
   } catch (error) {
     alert("UPS! ocurrio un error inesperado, reintenta en unos instantes");

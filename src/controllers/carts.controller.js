@@ -33,8 +33,23 @@ router.get("/:cid", async (req, res) => {
   //solicito los datos
   try {
     const response = await CartService.getById(cartId);
+
     res.status(200).send(response);
   } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
+// Debe finalizar el proceso de compra del carrito recibido
+router.post("/:cid/purchase", async (req, res) => {
+  const cartId = req.params.cid;
+
+  //solicito los datos
+  try {
+    const response = await CartService.getById(cartId);
+    res.status(200).send(response);
+  } catch (error) {
+    console.log("ENTRE EN ERROR!!!!!!!!!!!!!!!!!!!!!!!");
     res.status(400).send({ error: error.message });
   }
 });
@@ -48,7 +63,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
   try {
     await ProductService.getById(prodId); // 1 - valido prodId
     await CartService.addProduct(cartId, prodId, 1); // 2 - proceso el update
-    res.status(200).send({ exito: "fue agregado con exito" });
+    res.status(200).send({ exito: "el item se agrego con exito a tu carrito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }

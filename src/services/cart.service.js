@@ -6,13 +6,17 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
+  if (!id) {
+    throw new Error("service responde: faltan datos obligatorios");
+  }
+
   let result = await store.getCartsById(id);
   return result;
 };
 
 const newCart = async () => {
   const result = await store.addCart();
-  return result;
+  return result._id;
 };
 
 const addProduct = async (cartID, prodID, Qty) => {

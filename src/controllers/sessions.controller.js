@@ -41,7 +41,7 @@ router.post(
   }
 );
 
-// solo para JWT
+// solo para JWT (pasar por DTO para ocultar informacion sensible)
 router.get(
   "/current",
   passport.authenticate(["jwt"], { session: false }),

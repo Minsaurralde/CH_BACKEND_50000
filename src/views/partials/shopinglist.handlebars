@@ -1,0 +1,65 @@
+<div class="flex-grow-1">
+
+  {{! purchase resume }}
+  <div style="height: 450px; overflow-y: auto">
+    {{#each productList}}
+
+      <div class="d-flex align-items-center mb-5">
+        {{! image }}
+        <div class="flex-shrink-0">
+          <img
+            src="{{this.thumbnail}}"
+            class="img-fluid"
+            style="width: 100px"
+            alt="Generic placeholder image"
+          />
+        </div>
+        {{! name & qty & price }}
+        <div class="flex-grow-1 ms-3">
+          <a href="#!" class="float-end text-black"><i
+              class="fas fa-times"
+            ></i></a>
+          <h5 class="text-primary">{{this.title}}</h5>
+          <div class="d-flex align-items-center">
+            <p class="fw-bold mb-0 me-5 pe-3">{{this.price}}$</p>
+            <div class="def-number-input number-input safari_only">
+              {{! <button
+                onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                class="minus"
+              ></button> }}
+              <input
+                class="quantity fw-bold text-black"
+                min="0"
+                max="{{this.stock}}"
+                name="quantity"
+                value="{{this.quantity}}"
+                type="number"
+              />
+              {{! <button
+                onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                class="plus"
+              ></button> }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  {{! total }}
+  <div>
+    <hr
+      class="mb-4"
+      style="height: 2px; background-color: #1266f1; opacity: 1;"
+    />
+
+    <div
+      class="d-flex justify-content-between p-2 mb-2"
+      style="background-color: #e1f5fe;"
+    >
+      <h5 class="fw-bold mb-0">Total:</h5>
+      <h5 class="fw-bold mb-0">{{totalPrice}}$</h5>
+    </div>
+  </div>
+
+</div>

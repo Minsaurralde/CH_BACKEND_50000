@@ -11,6 +11,7 @@ const getCarts = async () => {
 
 const getCartsById = async (id) => {
   let result = await cartModel.findOne({ _id: id });
+
   return result;
 };
 
@@ -26,7 +27,6 @@ const addProductCart = async (cartID, prodID, Qty) => {
   const cart = await getCartsById(cartID);
 
   const prodList = cart.products;
-  console.log(prodList);
 
   const existsProd = prodList.findIndex(
     (el) => el.product.toString() === prodID
@@ -70,7 +70,6 @@ const updateProductCart = async (cartID, prodID, Qty) => {
   const cart = await getCartsById(cartID);
 
   const prodList = cart.products;
-  console.log(prodList);
 
   const existsProd = prodList.findIndex(
     (el) => el.product.toString() === prodID
@@ -89,7 +88,6 @@ const updateProductCart = async (cartID, prodID, Qty) => {
 const updateAllProductsCart = async (cartID, newProducts) => {
   const cart = await getCartsById(cartID);
   const prodList = cart.products;
-  console.log(prodList);
 
   prodList = newProducts;
   cart.save();

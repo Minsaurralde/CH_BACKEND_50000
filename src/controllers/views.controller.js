@@ -3,6 +3,7 @@ import passport from "passport";
 
 import ProductService from "../services/product.service.js";
 import { validateCookie } from "../middleware/validateCookie.js";
+import cartService from "../services/cart.service.js";
 
 const router = Router();
 
@@ -60,6 +61,42 @@ router.get(
   async (req, res) => {
     if (!req.user) return res.redirect("/login"); //------> ver session
     res.render("profile", { user: req.user });
+  }
+);
+
+router.get(
+  "/checkout",
+  passport.authenticate(["jwt"], { session: false }),
+  async (req, res) => {
+    if (!req.user) return res.redirect("/login");
+    const { cid } = req.query;
+
+    //obtengo los datos
+    const products = [];
+    let totalPrice = 0;
+    const data = await cartService.getById(cid);
+    const hasData = !!data.products.length;
+
+    if (hasData) {
+      const array = data.products;
+      array.forEach((element) => {
+        totalPrice += element.product.price * element.quantity;
+
+        products.push({
+          quantity: element.quantity,
+          title: element.product.title,
+          price: element.product.price,
+          thumbnail: element.product.thumbnail,
+          stock: element.product.stock,
+        });
+      });
+    }
+
+    res.render("checkout", {
+      hasProduct: hasData,
+      productList: products,
+      totalPrice: totalPrice,
+    });
   }
 );
 
