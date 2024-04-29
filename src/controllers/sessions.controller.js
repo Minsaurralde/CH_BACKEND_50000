@@ -36,6 +36,7 @@ router.post(
         expiresIn: "24h",
       }
     );
+    console.log("token: ", token);
     res
       .cookie(JWT_COOKIE, token, { httpOnly: true })
       .status(200)

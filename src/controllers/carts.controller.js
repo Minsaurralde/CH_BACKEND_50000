@@ -59,7 +59,6 @@ router.post(
       const purchase = await CartService.purchaseCart(cartId, email);
       res.status(200).send(purchase);
     } catch (error) {
-      console.log("ENTRE EN ERROR!!!!!!!!!!!!!!!!!!!!!!!");
       res.status(400).send({ error: error.message });
     }
   }

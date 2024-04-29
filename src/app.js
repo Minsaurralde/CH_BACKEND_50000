@@ -14,6 +14,7 @@ import ProductService from "./services/product.service.js";
 import { router } from "./router/index.js";
 import mongoUri from "./store/mongo/config/index.js";
 import __dirname from "./utils/dirnames.js";
+import { errorMidleware } from "./middleware/error.js";
 
 const app = express();
 
@@ -47,6 +48,12 @@ app.use(
   })
 );
 
+// CAPA DE RUTEO
+router(app);
+
+// Midleware para handlear errores (despues del enrutador)
+app.use(errorMidleware);
+
 const httpServer = app.listen(8080, () =>
   console.log("server ready on port 8080")
 );
@@ -67,6 +74,3 @@ socketServer.on("connection", (socket) => {
     }
   });
 });
-
-// //CAPA DE RUTEO
-router(app);
