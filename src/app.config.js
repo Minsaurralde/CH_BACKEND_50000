@@ -13,6 +13,7 @@ dotenv.config({
   // path: `./src/.env.${process.env.ENVIRONMENT}`,
   // path: `./src/.env.${mode}`,
 });
+export const ENVIRONMENT = process.env.ENVIRONMENT || "dev";
 
 export const GITHUB_APP_ID = process.env.GITHUB_APP_ID;
 export const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;

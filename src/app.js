@@ -15,8 +15,12 @@ import { router } from "./router/index.js";
 import mongoUri from "./store/mongo/config/index.js";
 import __dirname from "./utils/dirnames.js";
 import { errorMidleware } from "./middleware/error.js";
+import { logger } from "./middleware/logger.js";
 
 const app = express();
+
+// Midleware para loggear la request
+app.use(logger);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
