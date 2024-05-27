@@ -35,11 +35,9 @@ form.addEventListener("submit", (e) => {
   })
     .then((result) => {
       form.reset();
-      console.log(result);
       modalSuccess();
     })
     .catch((error) => {
-      console.log(error);
       modalError();
     });
 });

@@ -1,16 +1,13 @@
-// import mongoose from "mongoose";
-// import mongoUri from "./mongo/config/index.js";
 import { productModel } from "./mongo/models/product.model.js";
 
-// const DBconection = mongoose.connect(mongoUri);
-
-const getProducts = async (
+const getProducts = async ({
+  pagination = true,
   limit = 10,
   page = 1,
   sort = "",
   filter,
-  filterVal
-) => {
+  filterVal,
+}) => {
   let whereOptions = {};
 
   if (filter && filterVal) {
@@ -32,8 +29,9 @@ const getProducts = async (
 
   try {
     const queryResult = await productModel.paginate(whereOptions, {
-      limit: limit,
-      page: page,
+      pagination,
+      limit,
+      page,
       sort: sort ? { price: sort.toString() } : "",
       lean: true,
     });
@@ -63,7 +61,7 @@ const getProducts = async (
         : null, // Link directo a la página siguiente (null si hasNextPage=false)
     };
   } catch (error) {
-    console.log("error: ", error);
+    // console.log("error: ", error);
 
     result = { ...result, status: "error" };
   }

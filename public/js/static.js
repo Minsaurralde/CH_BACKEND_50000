@@ -53,7 +53,6 @@ const handleCategory = (e) => {
   const { target } = e;
   const category = target.textContent;
 
-  console.log(category);
   const params = new URLSearchParams(window.location.search);
   params.delete("page");
   params.delete("filter");
@@ -68,8 +67,6 @@ const handleCategory = (e) => {
 };
 
 const addToCart = async (prodID) => {
-  console.log("add: ", prodID);
-
   if (!currentCart) {
     const res = await fetch("http://localhost:8080/api/carts/", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -85,6 +82,8 @@ const addToCart = async (prodID) => {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         body: {}, // body data type must match "Content-Type" header
       });
+      if (res.status == 403)
+        throw new Error("Tu rol no tiene habilitado hacer compras");
       if (!res.ok) throw new Error("UPS! algo salio mal");
 
       const json = await res.json();
@@ -116,7 +115,6 @@ const signOut = async () => {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       body: {}, // body data type must match "Content-Type" header
     });
-    console.log(res);
     window.location.replace("/login");
   } catch (error) {
     alert("UPS! ocurrio un error inesperado, reintenta en unos instantes");

@@ -15,7 +15,6 @@ form.addEventListener("submit", (e) => {
     if (result.status === 200) {
       window.location.replace("/");
     } else {
-      console.log(result);
       Swal.fire({
         icon: "error",
         title: "Oops...",

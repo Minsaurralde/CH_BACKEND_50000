@@ -69,12 +69,18 @@ socketServer.on("connection", (socket) => {
   socket.on("new-product", async (newProduct) => {
     try {
       const res = await ProductService.newProduct(newProduct);
-
-      //si todo sale bien envio el update al cliente
-      socket.emit("update", res);
+      socket.emit("update-product", res);
     } catch (error) {
-      //si hay un error envio el detalle del error
-      socket.emit("error", error.message);
+      socket.emit("error-product", error.message);
+    }
+  });
+
+  socket.on("remove-product", async (id) => {
+    try {
+      await ProductService.deleteById(id);
+      socket.emit("delete-product", id);
+    } catch (error) {
+      socket.emit("error-product", error.message);
     }
   });
 });

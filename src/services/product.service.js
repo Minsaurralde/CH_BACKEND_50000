@@ -6,14 +6,20 @@ import {
 } from "../handlers/errors/enum-errors.js";
 import store from "../store/product.store.js";
 
-const getAll = async (limit, page, sort, filter, filterVal) => {
-  const result = await store.getProducts(limit, page, sort, filter, filterVal);
+const getAll = async ({ limit, page, sort, filter, filterVal, pagination }) => {
+  const result = await store.getProducts({
+    limit,
+    page,
+    sort,
+    filter,
+    filterVal,
+    pagination,
+  });
   return result;
 };
 
 const getById = async (id) => {
   if (!id) {
-    // throw new Error("service responde: faltan datos obligatorios");
     CustomError.createError({
       name: EErrorName.MISSING_DATA,
       cause: `* id    : id need to be a string, receibed ${id}`,
@@ -28,7 +34,6 @@ const getById = async (id) => {
 
 const newProduct = async (product) => {
   if (!product) {
-    // throw new Error("service responde: faltan datos obligatorios");
     CustomError.createError({
       name: EErrorName.MISSING_DATA,
       cause: `* product   : id need to be an object, receibed ${product}`,
@@ -43,7 +48,6 @@ const newProduct = async (product) => {
 
 const updateById = async (id, product) => {
   if (!id || !product) {
-    // throw new Error("service responde: faltan datos obligatorios");
     CustomError.createError({
       name: EErrorName.MISSING_DATA,
       cause: `
@@ -62,7 +66,6 @@ const updateById = async (id, product) => {
 
 const deleteById = async (id) => {
   if (!id) {
-    // throw new Error("service responde: faltan datos obligatorios");
     CustomError.createError({
       name: EErrorName.MISSING_DATA,
       cause: `* id    : id need to be a string, receibed ${id}`,

@@ -23,7 +23,6 @@ const modalError = (msj) => {
 
 const handlePurchase = async (event) => {
   event.preventDefault();
-  console.log("PURCHASE");
   const params = new URLSearchParams(window.location.search);
   const currentCart = params.get("cid");
 
@@ -35,10 +34,8 @@ const handlePurchase = async (event) => {
     });
     if (!res.ok) throw new Error("UPS! algo salio mal");
     const json = await res.json();
-    console.log(json);
     modalSuccess(json.ticket);
   } catch (error) {
-    console.log(error);
     modalError("unexpected error");
   }
 };

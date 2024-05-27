@@ -16,7 +16,7 @@ export const initializePassportLocal = () => {
         try {
           let user = await userModel.findOne({ email: username });
           if (user) {
-            console.log("user already exist");
+            // console.log("user already exist");
             return done(null, false);
           }
 
@@ -47,7 +47,6 @@ export const initializePassportLocal = () => {
           const user = await userModel.findOne({ email: username });
 
           if (!user) {
-            console.log("user does not exist");
             return done(null, false);
           }
 

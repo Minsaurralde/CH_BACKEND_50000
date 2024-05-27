@@ -75,9 +75,9 @@ const updateProductCart = async (cartID, prodID, Qty) => {
   );
 
   if (existsProd == -1) {
-    cart.products.push({ product: prodID, quantity: Qty }); // si no existe lo creo
+    cart.products.push({ product: prodID, quantity: Qty });
   } else {
-    prodList[existsProd].quantity = Qty; // si existe, piso el dato
+    prodList[existsProd].quantity = Qty;
   }
   cart.save();
 

@@ -1,10 +1,11 @@
 import { Router } from "express";
 import passport from "passport";
 
-import ProductService from "../services/product.service.js";
 import { validateCookie } from "../middleware/validateCookie.js";
-import cartService from "../services/cart.service.js";
 import { authorization } from "../middleware/authorization.js";
+import ProductService from "../services/product.service.js";
+import CartService from "../services/cart.service.js";
+import UserService from "../services/user.service.js";
 
 const router = Router();
 
@@ -20,13 +21,13 @@ router.get(
     const { filter, filterVal } = req.query;
 
     //obtengo los datos
-    const data = await ProductService.getAll(
+    const data = await ProductService.getAll({
       limit,
       page,
       sort,
       filter,
-      filterVal
-    );
+      filterVal,
+    });
     const hasData = !!data.payload.length;
 
     res.render("home", {
@@ -34,25 +35,6 @@ router.get(
       showDelete: false,
       product: data,
       user: req.user,
-    });
-  }
-);
-
-router.get(
-  "/realtimeproducts",
-  passport.authenticate(["jwt"], { session: false }),
-  authorization("admin"),
-  async (req, res) => {
-    if (!req.user) return res.redirect("/login");
-
-    //obtengo los datos
-    const data = await ProductService.getAll();
-    const hasData = !!data.payload.length;
-
-    res.render("realTimeProducts", {
-      hasProduct: hasData,
-      showDelete: true,
-      product: data,
     });
   }
 );
@@ -77,7 +59,7 @@ router.get(
     //obtengo los datos
     let totalPrice = 0;
     const products = [];
-    const data = await cartService.getById(cid);
+    const data = await CartService.getById(cid);
     const hasData = !!data.products.length;
 
     if (hasData) {
@@ -99,6 +81,43 @@ router.get(
       hasProduct: hasData,
       productList: products,
       totalPrice: totalPrice,
+    });
+  }
+);
+
+router.get(
+  "/realtimeproducts",
+  passport.authenticate(["jwt"], { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    if (!req.user) return res.redirect("/login");
+
+    //obtengo los datos
+    const data = await ProductService.getAll({ pagination: false });
+    const hasData = !!data.payload.length;
+
+    res.render("realTimeProducts", {
+      hasProduct: hasData,
+      showDelete: true,
+      product: data,
+    });
+  }
+);
+
+router.get(
+  "/realtimeusers",
+  passport.authenticate(["jwt"], { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    if (!req.user) return res.redirect("/login");
+
+    //obtengo los datos
+    let data = await UserService.getAll();
+    const hasData = !!data.length;
+
+    res.render("realTimeUsers", {
+      hasData: hasData,
+      user: data,
     });
   }
 );

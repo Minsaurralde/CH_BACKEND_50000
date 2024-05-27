@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 // program.option("-m, --mode <mode>", "Specifies the running mode", "dev");
 // program.parse();
 // const options = program.opts();
-
 // const mode = options.mode;
 
 dotenv.config({

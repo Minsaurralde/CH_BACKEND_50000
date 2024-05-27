@@ -36,30 +36,36 @@ const render = (data) => {
   newElement.setAttribute("id", data._id);
 
   let htmlProducto = `
+      <td>${data.category}</td>
       <td>${data.title}</td>
       <td>${data.price}</td>
       <td>${data.code}</td>
       <td>${data.stock}</td>
       <td>${data.description}</td>
       <td>${data.thumbnail || ""}</td>
-      <td><i class="bi bi-trash3-fill" onclick="remove(${data._id})"></i></td>
+      <td><i class="bi bi-trash3-fill" onclick="remove('${data._id}')"></i></td>
       `;
   newElement.innerHTML = htmlProducto;
   productList.appendChild(newElement);
 };
-const remove = (id) => {
+const deleteRender = (id) => {
   const toDelete = document.getElementById(id);
   const fatherNode = toDelete.parentNode;
   fatherNode.removeChild(toDelete);
+};
 
+const remove = (id) => {
   socket.emit("remove-product", id);
 };
 
 // Escuchando mensajes del backend para actualizar la lista de productos
-socket.on("update", (product) => {
+socket.on("update-product", (product) => {
   render(product);
 });
+socket.on("delete-product", (id) => {
+  deleteRender(id);
+});
 // mostramos una alerta si no se creo el producto
-socket.on("error", (data) => {
+socket.on("error-product", (data) => {
   alert(data);
 });

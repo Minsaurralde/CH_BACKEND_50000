@@ -8,7 +8,6 @@ import { createHash } from "../utils/bcrypt.js";
 
 const router = Router();
 
-// Debe mostrar la vista para reistrarase
 router.post(
   "/register",
   passport.authenticate("register", { session: false }),
@@ -17,12 +16,11 @@ router.post(
   }
 );
 
-// Debe mostrar la vista para hacer la autenticacion, si la sesion no existe
 router.post(
   "/login",
   passport.authenticate("login", { session: false }),
   async (req, res) => {
-    console.log("USER", req.user);
+    // console.log("USER", req.user);
     let token = jwt.sign(
       {
         first_name: req.user.first_name,
@@ -36,7 +34,7 @@ router.post(
         expiresIn: "24h",
       }
     );
-    console.log("token: ", token);
+    // console.log("token: ", token);
     res
       .cookie(JWT_COOKIE, token, { httpOnly: true })
       .status(200)
@@ -44,7 +42,6 @@ router.post(
   }
 );
 
-// solo para JWT (pasar por DTO para ocultar informacion sensible)
 router.get(
   "/current",
   passport.authenticate(["jwt"], { session: false }),

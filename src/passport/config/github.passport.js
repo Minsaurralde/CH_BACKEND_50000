@@ -18,7 +18,6 @@ export const intializePassportGithub = () => {
         callbackURL: GITHUB_CALLBACK,
       },
       async (accessToken, refreshToken, profile, done) => {
-        // console.log("profile: ", profile);
         let user = await userModel.findOne({ email: profile.profileUrl });
         if (!user) {
           let newUser = {
@@ -29,10 +28,8 @@ export const intializePassportGithub = () => {
             password: createHash("1234"),
           };
           const result = await userModel.create(newUser);
-          console.log("github result: ", result);
           done(null, result);
         } else {
-          console.log("github result: ", user);
           done(null, user);
         }
       }

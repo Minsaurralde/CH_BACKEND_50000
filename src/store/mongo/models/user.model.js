@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 import autopopulate from "mongoose-autopopulate";
 
-const nameCollection = "users"; // asi se llama la coleccion en la base de datos
+const nameCollection = "users";
 
 const customScheema = new mongoose.Schema({
-  //aqui escribimos todas las propiedades que debe tener nuestro modelo
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
   email: { type: String, required: true },
@@ -13,7 +12,7 @@ const customScheema = new mongoose.Schema({
   role: { type: String, default: "user" },
   cart: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "carts", // NOTA: esta referencia es el nombre del modelo ( nameCollection )
+    ref: "carts",
     autopopulate: true,
   },
 });
