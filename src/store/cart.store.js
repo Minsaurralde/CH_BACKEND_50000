@@ -28,7 +28,7 @@ const addProductCart = async (cartID, prodID, Qty) => {
   const prodList = cart.products;
 
   const existsProd = prodList.findIndex(
-    (el) => el.product.toString() === prodID
+    (el) => el.product._id.toString() === prodID
   );
 
   if (existsProd == -1) {
@@ -61,25 +61,6 @@ const deleteAllProductsCart = async (cartID) => {
 
   cart.products = [];
   await cart.save();
-
-  return;
-};
-
-const updateProductCart = async (cartID, prodID, Qty) => {
-  const cart = await getCartsById(cartID);
-
-  const prodList = cart.products;
-
-  const existsProd = prodList.findIndex(
-    (el) => el.product.toString() === prodID
-  );
-
-  if (existsProd == -1) {
-    cart.products.push({ product: prodID, quantity: Qty });
-  } else {
-    prodList[existsProd].quantity = Qty;
-  }
-  cart.save();
 
   return;
 };
@@ -146,7 +127,6 @@ export default {
   addProductCart,
   deleteProductCart,
   deleteAllProductsCart,
-  updateProductCart,
   updateAllProductsCart,
   purchaseCart,
 };

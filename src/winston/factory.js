@@ -1,4 +1,4 @@
-import { ENVIRONMENT } from "../app.config.js";
+import { ENVIRONMENT } from "../config/app.config.js";
 import devLogger from "./logger/devLogger.js";
 import prodLogger from "./logger/prodLogger.js";
 

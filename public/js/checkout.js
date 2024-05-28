@@ -27,7 +27,8 @@ const handlePurchase = async (event) => {
   const currentCart = params.get("cid");
 
   try {
-    const url = `http://localhost:8080/api/carts/${currentCart}/purchase`;
+    const host = location.origin;
+    const url = `${host}/api/carts/${currentCart}/purchase`;
     const res = await fetch(url, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       body: {}, // body data type must match "Content-Type" header

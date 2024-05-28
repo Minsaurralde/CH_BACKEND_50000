@@ -6,7 +6,7 @@
   "main": "src/app.js",
   "scripts": {
     "dev": "nodemon",
-    "start": "nodemon",
+    "start": "node src/app.js",
     "start:dev": "set ENVIRONMENT=dev && nodemon",
     "start:prod": "set ENVIRONMENT=prod && nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -29,6 +29,7 @@
     "mongoose-autopopulate": "^1.0.1",
     "mongoose-paginate-v2": "^1.7.1",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.13",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "passport-jwt": "^4.0.1",

@@ -3,7 +3,7 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 
 import { userModel } from "../store/mongo/models/user.model.js";
-import { JWT_COOKIE, JWT_SECRET } from "../app.config.js";
+import { JWT_COOKIE, JWT_SECRET } from "../config/app.config.js";
 import { createHash } from "../utils/bcrypt.js";
 
 const router = Router();

@@ -1,3 +1,4 @@
+import { HOST } from "../config/app.config.js";
 import { productModel } from "./mongo/models/product.model.js";
 
 const getProducts = async ({
@@ -46,18 +47,14 @@ const getProducts = async ({
       hasPrevPage: queryResult.hasPrevPage, // Indicador para saber si la página previa existe
       hasNextPage: queryResult.hasNextPage, // Indicador para saber si la página siguiente existe.
       prevLink: queryResult.hasPrevPage
-        ? `http://localhost:8080?limit=${limit}&page=${
-            page - 1
-          }&sort=${sort}&filter=${filter ? filter : ""}&filterVal=${
-            filterVal ? filterVal : ""
-          }`
+        ? `${HOST}?limit=${limit}&page=${page - 1}&sort=${sort}&filter=${
+            filter ? filter : ""
+          }&filterVal=${filterVal ? filterVal : ""}`
         : null, // Link directo a la página previa (null si hasPrevPage=false)
       nextLink: queryResult.hasNextPage
-        ? `http://localhost:8080?limit=${limit}&page=${
-            page + 1
-          }&sort=${sort}&filter=${filter ? filter : ""}&filterVal=${
-            filterVal ? filterVal : ""
-          }`
+        ? `${HOST}?limit=${limit}&page=${page + 1}&sort=${sort}&filter=${
+            filter ? filter : ""
+          }&filterVal=${filterVal ? filterVal : ""}`
         : null, // Link directo a la página siguiente (null si hasNextPage=false)
     };
   } catch (error) {

@@ -12,6 +12,7 @@ dotenv.config({
   // path: `./src/.env.${process.env.ENVIRONMENT}`,
   // path: `./src/.env.${mode}`,
 });
+
 export const ENVIRONMENT = process.env.ENVIRONMENT || "dev";
 
 export const GITHUB_APP_ID = process.env.GITHUB_APP_ID;
@@ -25,3 +26,9 @@ export const JWT_COOKIE = process.env.JWT_COOKIE;
 export const MONGO_CLUSTER = process.env.MONGO_CLUSTER;
 export const MONGO_USER = process.env.MONGO_USER;
 export const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
+
+export const NODEMAILER_USER = process.env.NODEMAILER_USER;
+export const NODEMAILER_PASSWORD = process.env.NODEMAILER_PASSWORD;
+
+export const PORT = process.env.PORT || 8080;
+export const HOST = process.env.HOST;

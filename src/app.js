@@ -10,16 +10,16 @@ import { initializePassportJWT } from "./passport/config/jwt.passport.js";
 import { initializePassportLocal } from "./passport/config/local.passport.js";
 import { intializePassportGithub } from "./passport/config/github.passport.js";
 
-import ProductService from "./services/product.service.js";
 import { router } from "./router/index.js";
 import mongoUri from "./store/mongo/config/index.js";
 import __dirname from "./utils/dirnames.js";
 import { errorMidleware } from "./middleware/error.js";
 import { logger } from "./middleware/logger.js";
+import { configureWebSocket } from "./websocket/websocket.js";
 
 const app = express();
 
-// Midleware para loggear la request
+// Midleware para loggear las request
 app.use(logger);
 
 app.use(express.json());
@@ -38,6 +38,7 @@ initializePassportJWT();
 intializePassportGithub();
 app.use(passport.initialize());
 
+// Configuraciones del db
 const DBconection = mongoose.connect(mongoUri);
 app.use(
   session({
@@ -52,9 +53,8 @@ app.use(
   })
 );
 
-// CAPA DE RUTEO
+// Capa de ruteo
 router(app);
-
 // Midleware para handlear errores (despues del enrutador)
 app.use(errorMidleware);
 
@@ -62,25 +62,6 @@ const httpServer = app.listen(8080, () =>
   console.log("server ready on port 8080")
 );
 
+// Configuraciones de websocket
 const socketServer = new Server(httpServer);
-socketServer.on("connection", (socket) => {
-  console.log("New conection id: " + socket.id);
-
-  socket.on("new-product", async (newProduct) => {
-    try {
-      const res = await ProductService.newProduct(newProduct);
-      socket.emit("update-product", res);
-    } catch (error) {
-      socket.emit("error-product", error.message);
-    }
-  });
-
-  socket.on("remove-product", async (id) => {
-    try {
-      await ProductService.deleteById(id);
-      socket.emit("delete-product", id);
-    } catch (error) {
-      socket.emit("error-product", error.message);
-    }
-  });
-});
+configureWebSocket(socketServer);

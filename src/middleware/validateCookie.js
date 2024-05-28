@@ -1,4 +1,4 @@
-import { JWT_COOKIE } from "../app.config.js";
+import { JWT_COOKIE } from "../config/app.config.js";
 
 export const validateCookie = (req, res, next) => {
   const cookie = req.cookies[JWT_COOKIE];

@@ -1,4 +1,13 @@
 let currentCart = "";
+const host = location.origin;
+
+const getCurrentCart = async () => {
+  const response = await fetch(`${host}/api/carts/`, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    body: {}, // body data type must match "Content-Type" header
+  });
+  currentCart = await response.json();
+};
 
 const activeSort = () => {
   const params = new URLSearchParams(window.location.search);
@@ -67,16 +76,10 @@ const handleCategory = (e) => {
 };
 
 const addToCart = async (prodID) => {
-  if (!currentCart) {
-    const res = await fetch("http://localhost:8080/api/carts/", {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      body: {}, // body data type must match "Content-Type" header
-    });
-    currentCart = await res.json();
-  }
+  if (!currentCart) await getCurrentCart();
 
   if (currentCart) {
-    const url = `http://localhost:8080/api/carts/${currentCart}/product/${prodID}`;
+    const url = `${host}/api/carts/${currentCart}/product/${prodID}`;
     try {
       const res = await fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -94,15 +97,8 @@ const addToCart = async (prodID) => {
   }
 };
 
-const goToCheckout = () => {
-  if (!currentCart) {
-    Swal.fire({
-      icon: "info",
-      title: "Your Cart is empty",
-      text: "Click OK to continue shopping.",
-    });
-    return;
-  }
+const goToCheckout = async () => {
+  if (!currentCart) await getCurrentCart();
 
   const params = new URLSearchParams("cid");
   params.set("cid", currentCart.toString());
@@ -111,7 +107,7 @@ const goToCheckout = () => {
 
 const signOut = async () => {
   try {
-    const res = await fetch("http://localhost:8080/api/sessions/logout", {
+    const res = await fetch(`${host}/api/sessions/logout`, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       body: {}, // body data type must match "Content-Type" header
     });
