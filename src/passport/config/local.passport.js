@@ -53,6 +53,8 @@ export const initializePassportLocal = () => {
           if (!isValidPassword(user, password)) {
             return done("invalid password", null);
           }
+          user.last_login = Date.now();
+          await user.save();
 
           return done(null, user);
         } catch (error) {}

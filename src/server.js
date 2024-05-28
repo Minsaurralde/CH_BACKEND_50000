@@ -4,7 +4,6 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import { Server } from "socket.io";
 import passport from "passport";
 import { initializePassportJWT } from "./passport/config/jwt.passport.js";
 import { initializePassportLocal } from "./passport/config/local.passport.js";
@@ -15,7 +14,6 @@ import mongoUri from "./store/mongo/config/index.js";
 import __dirname from "./utils/dirnames.js";
 import { errorMidleware } from "./middleware/error.js";
 import { logger } from "./middleware/logger.js";
-import { configureWebSocket } from "./websocket/websocket.js";
 
 const app = express();
 
@@ -58,10 +56,4 @@ router(app);
 // Midleware para handlear errores (despues del enrutador)
 app.use(errorMidleware);
 
-const httpServer = app.listen(8080, () =>
-  console.log("server ready on port 8080")
-);
-
-// Configuraciones de websocket
-const socketServer = new Server(httpServer);
-configureWebSocket(socketServer);
+export default app;

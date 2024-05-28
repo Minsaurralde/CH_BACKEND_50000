@@ -88,26 +88,6 @@ const deleteAllProducts = async (cartID) => {
   return;
 };
 
-const updateProduct = async (cartID, prodID, Qty) => {
-  if (!cartID || !prodID || !Qty) {
-    // throw new Error("service responde: faltan datos obligatorios");
-    CustomError.createError({
-      name: EErrorName.MISSING_DATA,
-      cause: `
-      List of required properties:
-      * cartId    : cartId need to be a string, receibed ${cartId}
-      * prodID    : prodID need to be a string, receibed ${prodID}
-      * Qty       : Qty need to be a number, receibed ${Qty}
-      `,
-      message: EErrorMsg.MISSING_DATA,
-      code: EErrorCode.BAD_REQUEST,
-    });
-  }
-
-  await store.updateProductCart(cartID, prodID, Qty);
-  return;
-};
-
 const updateAllProducts = async (cartID, newProducts) => {
   if (!cartID || !newProducts) {
     // throw new Error("service responde: faltan datos obligatorios");
@@ -153,7 +133,6 @@ export default {
   addProduct,
   deleteProduct,
   deleteAllProducts,
-  updateProduct,
   updateAllProducts,
   purchaseCart,
 };

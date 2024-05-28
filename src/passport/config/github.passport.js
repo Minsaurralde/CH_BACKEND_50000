@@ -5,7 +5,7 @@ import {
   GITHUB_CALLBACK,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
-} from "../../app.config.js";
+} from "../../config/app.config.js";
 import { createHash } from "../../utils/bcrypt.js";
 
 export const intializePassportGithub = () => {
@@ -30,6 +30,9 @@ export const intializePassportGithub = () => {
           const result = await userModel.create(newUser);
           done(null, result);
         } else {
+          user.last_login = Date.now();
+          await user.save();
+
           done(null, user);
         }
       }

@@ -1,7 +1,7 @@
 import passport from "passport";
 import jwt from "passport-jwt";
 import { cookieExtractor } from "../../utils/cookieExtractor.js";
-import { JWT_SECRET } from "../../app.config.js";
+import { JWT_SECRET } from "../../config/app.config.js";
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;

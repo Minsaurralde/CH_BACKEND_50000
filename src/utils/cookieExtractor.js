@@ -1,4 +1,4 @@
-import { JWT_COOKIE } from "../app.config.js";
+import { JWT_COOKIE } from "../config/app.config.js";
 
 export const cookieExtractor = (req) => {
   let token = null;
