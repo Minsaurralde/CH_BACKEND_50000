@@ -16,6 +16,8 @@ import __dirname from "./utils/dirnames.js";
 import { errorMidleware } from "./middleware/error.js";
 import { logger } from "./middleware/logger.js";
 import { configureWebSocket } from "./websocket/websocket.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 const app = express();
 
@@ -52,6 +54,20 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// swagger doc
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.3",
+    info: {
+      title: "doc",
+      description: "esta es la docu de la API",
+    },
+  },
+  apis: [`${__dirname}/src/docs/**/*.yaml`],
+};
+const specs = swaggerJSDoc(swaggerOptions);
+app.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 // Capa de ruteo
 router(app);

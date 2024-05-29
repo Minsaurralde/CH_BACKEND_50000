@@ -7,6 +7,15 @@ import { userModel } from "../store/mongo/models/user.model.js";
 
 const router = Router();
 
+router.get("/", async (req, res) => {
+  try {
+    const response = await CartService.getAll();
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
 router.post(
   "/",
   passport.authenticate(["jwt"], { session: false }),
@@ -28,15 +37,6 @@ router.post(
   }
 );
 
-router.get("/", async (req, res) => {
-  try {
-    const response = await CartService.getAll();
-    res.status(200).send(response);
-  } catch (error) {
-    res.status(400).send({ error: error.message });
-  }
-});
-
 router.get("/:cid", async (req, res) => {
   const cartId = req.params.cid;
 
@@ -44,6 +44,29 @@ router.get("/:cid", async (req, res) => {
     const response = await CartService.getById(cartId);
 
     res.status(200).send(response);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
+router.put("/:cid", async (req, res) => {
+  const cartId = req.params.cid;
+  const newProducts = req.body;
+
+  try {
+    await CartService.updateAllProducts(cartId, newProducts); // proceso el update
+    res.status(200).send({ exito: "se actualizo con exito" });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
+router.delete("/:cid", async (req, res) => {
+  const cartId = req.params.cid;
+
+  try {
+    await CartService.deleteAllProducts(cartId); // proceso el borrado
+    res.status(200).send({ exito: "los productos se eliminaron con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
@@ -86,29 +109,6 @@ router.post(
   }
 );
 
-router.delete("/:cid/product/:pid", async (req, res) => {
-  const cartId = req.params.cid;
-  const prodId = req.params.pid;
-
-  try {
-    await CartService.deleteProduct(cartId, prodId); // proceso el borrado
-    res.status(200).send({ exito: "se elimino con exito" });
-  } catch (error) {
-    res.status(400).send({ error: error.message });
-  }
-});
-
-router.delete("/:cid", async (req, res) => {
-  const cartId = req.params.cid;
-
-  try {
-    await CartService.deleteAllProducts(cartId); // proceso el borrado
-    res.status(200).send({ exito: "los productos se eliminaron con exito" });
-  } catch (error) {
-    res.status(400).send({ error: error.message });
-  }
-});
-
 router.put(
   "/:cid/product/:pid",
   passport.authenticate(["jwt"], { session: false }),
@@ -128,13 +128,13 @@ router.put(
   }
 );
 
-router.put("/:cid", async (req, res) => {
+router.delete("/:cid/product/:pid", async (req, res) => {
   const cartId = req.params.cid;
-  const newProducts = req.body;
+  const prodId = req.params.pid;
 
   try {
-    await CartService.updateAllProducts(cartId, newProducts); // proceso el update
-    res.status(200).send({ exito: "se actualizo con exito" });
+    await CartService.deleteProduct(cartId, prodId); // proceso el borrado
+    res.status(200).send({ exito: "se elimino con exito" });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }

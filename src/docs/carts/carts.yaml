@@ -1,0 +1,403 @@
+openapi: "3.0.3"
+info:
+  title: "API Carts"
+  version: "1.0"
+paths:
+  /api/carts/:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - carts
+      responses:
+        "200":
+          description: Lista de carritos obtenida con éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        "400":
+          description: Error al obtener los carritos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    post:
+      summary: Obtiene un carrito para el usuario logueado
+      tags:
+        - carts
+      security:
+        - jwt: []
+      responses:
+        "200":
+          description: El carrito ha sido obtenidos
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ad123455jojlml4kn4l"
+        "400":
+          description: Error en la creación o recuperación del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito por ID
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        "200":
+          description: el carrito ha sido obtenido
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "400":
+          description: Error al obtener el carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    put:
+      summary: Actualiza los productos en el carrito
+      tags:
+        - carts
+      description: Este endpoint permite actualizar los productos en un carrito especificado por su ID.
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  productId:
+                    type: string
+                  qty:
+                    type: integer
+                required:
+                  - productId
+                  - qty
+              example:
+                - productId: "12345"
+                  qty: 2
+                - productId: "67890"
+                  qty: 3
+      responses:
+        "200":
+          description: Carrito actualizado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                example:
+                  exito: "se actualizo con exito"
+        "400":
+          description: Error en la actualización del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    delete:
+      summary: Elimina todos los productos de un carrito
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Productos eliminados del carrito
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "el carrito fue eliminado con exito"
+        "400":
+          description: Error al eliminar los productos del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Añade un producto al carrito
+      tags:
+        - carts
+      security:
+        - jwt: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto agregado con éxito al carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                    example: "El item se agregó con éxito a tu carrito"
+        "400":
+          description: Error al agregar el producto al carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    put:
+      summary: Actualizar la cantidad de un producto en el carrito
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      security:
+        - jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qty:
+                  type: integer
+              required:
+                - qty
+              example:
+                qty: 5
+      responses:
+        "200":
+          description: Cantidad actualizada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                    example: "Se actualizó con éxito"
+        "400":
+          description: Error en la actualización
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    delete:
+      summary: Elimina un producto del carrito
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado con éxito del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                    example: "Se eliminó con éxito"
+        "400":
+          description: Error al eliminar el producto del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Realiza una compra del carrito
+      description: Este endpoint permite a un usuario autenticado realizar la compra de un carrito especificado por su ID.
+      tags:
+        - carts
+      security:
+        - jwt: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Compra realizada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  purchaseId:
+                    type: string
+                example:
+                  message: "Compra realizada con éxito"
+                  purchaseId: "123456789"
+        "400":
+          description: Error en la compra
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Cart:
+      properties:
+        _id:
+          type: string
+          description: id del campo
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        __v:
+          type: number
+          description: numero de version
+    Product:
+      properties:
+        _id:
+          type: string
+          description: id del campo
+        title:
+          type: string
+          description: nombre del producto
+        category:
+          type: string
+          description: categoria del producto
+        description:
+          type: string
+          description: breve descripcion del producto
+        price:
+          type: number
+          description: precio del producto
+        thumbnail:
+          type: string
+          description: imagen del producto
+        code:
+          type: string
+          description: codigo de producto
+        stock:
+          type: number
+          description: cantidad disponible para la venta
+        status:
+          type: boolean
+          description: estado disponible para la venta
+        __v:
+          type: number
+          description: numero de version

@@ -1,0 +1,185 @@
+openapi: "3.0.3"
+info:
+  title: "API de users"
+  version: "1.0"
+paths:
+  /api/users:
+    get:
+      summary: Obtener todos los usuarios
+      tags:
+        - users
+      description: Obtiene una lista de todos los usuarios. Requiere autorización de administrador.
+      security:
+        - jwt: []
+      responses:
+        "200":
+          description: Lista de usuarios obtenida con éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    email:
+                      type: string
+                    role:
+                      type: string
+                example:
+                  - id: "1"
+                    first_name: "John"
+                    last_name: "Doe"
+                    email: "john.doe@example.com"
+                    role: "user"
+                  - id: "2"
+                    first_name: "Jane"
+                    last_name: "Smith"
+                    email: "jane.smith@example.com"
+                    role: "admin"
+        "400":
+          description: Error al obtener la lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    delete:
+      summary: Eliminar usuarios inactivos
+      tags:
+        - users
+      description: Elimina todos los usuarios que no se autenticaron hace mas de 2 dias. Requiere autorización de administrador.
+      security:
+        - jwt: []
+      responses:
+        "200":
+          description: Usuarios inactivos eliminados con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                example:
+                  exito: "fueron eliminados 2 usuarios"
+        "400":
+          description: Error al eliminar usuarios inactivos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/users/{uid}:
+    get:
+      summary: Obtener un usuario por ID
+      tags:
+        - users
+      description: Obtiene un usuario específico por su ID. Requiere autorización de administrador.
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        "200":
+          description: Usuario obtenido con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Error al obtener el usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    delete:
+      summary: Eliminar un usuario por ID
+      tags:
+        - users
+      description: Elimina un usuario específico por su ID. Requiere autorización de administrador.
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        "200":
+          description: Usuario eliminado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                example:
+                  exito: "el usuario fue eliminado con exito"
+        "400":
+          description: Error al eliminar el usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      properties:
+        _id:
+          type: string
+          example: "addf45666ddffgrrtyy1344"
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        age:
+          type: number
+          example: 30
+        role:
+          type: string
+          example: "Descripción del error"

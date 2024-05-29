@@ -1,0 +1,295 @@
+openapi: "3.0.3"
+info:
+  title: "API products"
+  version: "1.0"
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - products
+      description: Este endpoint permite obtener una lista de productos con opciones de paginación, filtrado y ordenación.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Límite de resultados por página
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          description: Página de resultados
+          schema:
+            type: integer
+        - name: filter
+          in: query
+          required: false
+          description: Filtro para los resultados
+          schema:
+            type: string
+        - name: filterVal
+          in: query
+          required: false
+          description: Valor del filtro
+          schema:
+            type: string
+        - name: sort
+          in: query
+          required: false
+          description: Ordenar resultados
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de productos obtenida con éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "400":
+          description: Error al obtener productos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    post:
+      summary: Añade un nuevo producto
+      tags:
+        - products
+      description: Este endpoint permite añadir un nuevo producto. Solo los administradores pueden acceder a este endpoint.
+      security:
+        - jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Camisa"
+                category:
+                  type: string
+                  example: "hombre"
+                description:
+                  type: string
+                  example: "Descripción del producto"
+                price:
+                  type: number
+                  example: 60000
+                thumbnail:
+                  type: string
+                  example: "url_imagen"
+                code:
+                  type: string
+                  example: "PN1"
+                stock:
+                  type: integer
+                  example: 20
+      responses:
+        "200":
+          description: Producto añadido con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                example:
+                  exito: "fue agregado con exito"
+        "400":
+          description: Error al añadir producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto por ID
+      tags:
+        - products
+      description: Este endpoint permite obtener un producto especificado por su ID.
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto obtenido con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Error al obtener el producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    put:
+      summary: Actualiza un producto por ID
+      tags:
+        - products
+      description: Este endpoint permite actualizar un producto especificado por su ID. Solo los administradores pueden acceder a este endpoint.
+      security:
+        - jwt: []
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Producto Actualizado"
+                category:
+                  type: string
+                  example: "Categoria Actualizada"
+                description:
+                  type: string
+                  example: "Descripción del producto actualizado"
+                price:
+                  type: number
+                  example: 150
+                thumbnail:
+                  type: string
+                  example: "url_imagen_actualizada"
+                code:
+                  type: string
+                  example: "PA1"
+                stock:
+                  type: integer
+                  example: 20
+      responses:
+        "200":
+          description: Producto actualizado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                example:
+                  exito: "se actualizo con exito"
+        "400":
+          description: Error al actualizar el producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+    delete:
+      summary: Elimina un producto por ID
+      tags:
+        - products
+      description: Este endpoint permite eliminar un producto especificado por su ID. Solo los administradores pueden acceder a este endpoint.
+      security:
+        - jwt: []
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exito:
+                    type: string
+                example:
+                  exito: "fue borrado con exito"
+        "400":
+          description: Error al eliminar el producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Product:
+      properties:
+        _id:
+          type: string
+          example: "addf45666cghhh788vgg"
+        title:
+          type: string
+          example: "Cartera"
+        category:
+          type: string
+          example: "Mujer"
+        description:
+          type: string
+          example: "Descripción del producto nuevo"
+        price:
+          type: number
+          example: 1500
+        thumbnail:
+          type: string
+          example: "url_imagen"
+        code:
+          type: string
+          example: "PN1"
+        stock:
+          type: integer
+          example: 20
+        status:
+          type: boolean
+          example: true
+        __v:
+          type: number
+          example: 2

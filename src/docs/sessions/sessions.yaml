@@ -1,0 +1,279 @@
+openapi: "3.0.3"
+info:
+  title: "API de session"
+  version: "1.0"
+paths:
+  /api/session/register:
+    post:
+      summary: Registro de usuario
+      tags:
+        - session
+      description: Registra un nuevo usuario.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: "John"
+                last_name:
+                  type: string
+                  example: "Doe"
+                email:
+                  type: string
+                  example: "john.doe@example.com"
+                password:
+                  type: string
+                  example: "password123"
+      responses:
+        "200":
+          description: Registro exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  status: "success"
+                  message: "register ok"
+        "400":
+          description: Error en el registro
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/session/login:
+    post:
+      summary: Inicio de sesión
+      tags:
+        - session
+      description: Inicia sesión con un usuario registrado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "john.doe@example.com"
+                password:
+                  type: string
+                  example: "password123"
+      responses:
+        "200":
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: object
+                    properties:
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      email:
+                        type: string
+                      age:
+                        type: integer
+                      role:
+                        type: string
+                example:
+                  status: "success"
+                  message:
+                    first_name: "John"
+                    last_name: "Doe"
+                    email: "john.doe@example.com"
+                    age: 30
+                    role: "user"
+        "401":
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Credenciales inválidas"
+
+  /api/session/current:
+    get:
+      summary: Obtener información del usuario actual
+      tags:
+        - session
+      description: Obtiene información del usuario autenticado.
+      security:
+        - jwt: []
+      responses:
+        "200":
+          description: Información del usuario obtenida con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email:
+                    type: string
+                  age:
+                    type: integer
+                  role:
+                    type: string
+                example:
+                  first_name: "John"
+                  last_name: "Doe"
+                  email: "john.doe@example.com"
+                  age: 30
+                  role: "user"
+        "401":
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "No autorizado"
+
+  /api/session/logout:
+    post:
+      summary: Cerrar sesión
+      tags:
+        - session
+      description: Cierra la sesión del usuario actual.
+      responses:
+        "200":
+          description: Sesión cerrada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  status: "success"
+                  message: "Logout OK!"
+        "500":
+          description: Error al cerrar la sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/session/restartPassword:
+    post:
+      summary: Restablecer contraseña
+      tags:
+        - session
+      description: Restablece la contraseña de un usuario.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "john.doe@example.com"
+                password:
+                  type: string
+                  example: "newpassword123"
+      responses:
+        "200":
+          description: Contraseña restablecida con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  status: "success"
+                  message: "update ok"
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "user not found"
+        "500":
+          description: Error al restablecer la contraseña
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Descripción del error"
+
+  /api/session/github:
+    get:
+      summary: Autenticación con GitHub
+      tags:
+        - session
+      description: Redirige a GitHub para la autenticación.
+      responses:
+        "302":
+          description: Redirección a GitHub para autenticación
+
+  /api/session/callback:
+    get:
+      summary: Callback de autenticación con GitHub
+      tags:
+        - session
+      description: Maneja la redirección desde GitHub y autentica al usuario.
+      responses:
+        "302":
+          description: Redirección después de la autenticación
+
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
