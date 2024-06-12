@@ -8,12 +8,12 @@ import dotenv from "dotenv";
 // const mode = options.mode;
 
 dotenv.config({
-  path: `./src/.env.dev`,
+  path: `./src/.env.prod`,
   // path: `./src/.env.${process.env.ENVIRONMENT}`,
   // path: `./src/.env.${mode}`,
 });
 
-export const ENVIRONMENT = process.env.ENVIRONMENT || "dev";
+export const ENVIRONMENT = process.env.ENVIRONMENT || "prod";
 
 export const GITHUB_APP_ID = process.env.GITHUB_APP_ID;
 export const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
@@ -30,5 +30,5 @@ export const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 export const NODEMAILER_USER = process.env.NODEMAILER_USER;
 export const NODEMAILER_PASSWORD = process.env.NODEMAILER_PASSWORD;
 
-export const PORT = process.env.PORT || 8080;
+export const PORT = process.env.PORT;
 export const HOST = process.env.HOST;

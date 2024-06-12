@@ -18,6 +18,7 @@ import { logger } from "./middleware/logger.js";
 import { configureWebSocket } from "./websocket/websocket.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
+import { PORT } from "./config/app.config.js";
 
 const app = express();
 
@@ -74,8 +75,8 @@ router(app);
 // Midleware para handlear errores (despues del enrutador)
 app.use(errorMidleware);
 
-const httpServer = app.listen(8080, () =>
-  console.log("server ready on port 8080")
+const httpServer = app.listen(PORT, () =>
+  console.log(`server ready on port ${PORT}`)
 );
 
 // Configuraciones de websocket
